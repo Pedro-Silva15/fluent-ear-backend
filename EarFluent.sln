@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Ui", "EarFluent.Api\EarFluent.Ui.csproj", "{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Domain", "EarFluent.Domain\EarFluent.Domain.csproj", "{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Application", "EarFluent.Application\EarFluent.Application.csproj", "{E6E5F69B-C855-EDB6-D035-2CA0AC450961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Infrastructure", "EarFluent.Infrastructure\EarFluent.Infrastructure.csproj", "{0167EAC3-DF2F-5460-754A-B99A6EDE2078}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6E5F69B-C855-EDB6-D035-2CA0AC450961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6E5F69B-C855-EDB6-D035-2CA0AC450961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6E5F69B-C855-EDB6-D035-2CA0AC450961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6E5F69B-C855-EDB6-D035-2CA0AC450961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0167EAC3-DF2F-5460-754A-B99A6EDE2078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0167EAC3-DF2F-5460-754A-B99A6EDE2078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0167EAC3-DF2F-5460-754A-B99A6EDE2078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0167EAC3-DF2F-5460-754A-B99A6EDE2078}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F386512-85E2-4539-95B1-4CBE6D1E7918}
+	EndGlobalSection
+EndGlobal
