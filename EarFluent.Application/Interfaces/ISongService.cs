@@ -1,10 +1,9 @@
-using EarFluent.Domain;
-using EarFluent.Requests;
+using EarFluent.Application.DTOs.Requests;
+using EarFluent.Domain.Entities;
 
 namespace EarFluent.Application.Interfaces;
 
 public interface ISongService
 {
-    Task<Song> GetLyrics(LyricsRequest request);
-    void StandardizeLyrics(string lyrics);
+    Task<SongEntity> GetLyrics(SongLyricsRequest request);
 }
