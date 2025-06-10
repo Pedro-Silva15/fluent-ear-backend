@@ -1,13 +1,15 @@
 using EarFluent.Application.Interfaces;
 using EarFluent.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient<ISongService>();
+builder.Services.AddScoped<ISongService, LrclibSongService>();
 builder.Services.AddControllers();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ISongService, LyricsOvhSongService>();
-builder.Services.AddHttpClient<LyricsOvhSongService>();
 
 builder.Services.AddCors(options =>
 {

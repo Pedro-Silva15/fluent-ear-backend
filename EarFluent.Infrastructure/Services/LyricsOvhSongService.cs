@@ -9,11 +9,12 @@ namespace EarFluent.Infrastructure.Services;
 public class LyricsOvhSongService : ISongService
 {
     private readonly HttpClient _client;
-    private readonly string _apiUrl = Environment.GetEnvironmentVariable("lyricsUrl") ?? throw new InvalidOperationException("The api url is not set.");
+    private readonly string _apiUrl;
 
-    public LyricsOvhSongService(HttpClient client)
+    public LyricsOvhSongService(HttpClient client, string apiUrl)
     {
         _client = client;
+        _apiUrl = apiUrl;
     }
 
     public async Task<SongEntity> GetLyrics(GetLyricsRequest request)
