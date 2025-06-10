@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace EarFluent.Application.DTOs.Response;
+namespace FluentEar.Application.DTOs.Response;
 
 public class SongLyricsResponse
 {

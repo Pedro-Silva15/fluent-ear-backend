@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EarFluent.Application\EarFluent.Application.csproj" />
-    <ProjectReference Include="..\EarFluent.Infrastructure\EarFluent.Infrastructure.csproj" />
+    <ProjectReference Include="..\FluentEar.Application\FluentEar.Application.csproj" />
+    <ProjectReference Include="..\FluentEar.Infrastructure\FluentEar.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

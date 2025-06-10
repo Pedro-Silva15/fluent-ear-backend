@@ -1,10 +1,10 @@
-using EarFluent.Application.DTOs.Response;
-using EarFluent.Application.Interfaces;
-using EarFluent.Application.Models.Lyrics.Requests;
-using EarFluent.Domain.Entities;
+using FluentEar.Application.DTOs.Response;
+using FluentEar.Application.Interfaces;
+using FluentEar.Application.Models.Lyrics.Requests;
+using FluentEar.Domain.Entities;
 using System.Net.Http.Json;
 
-namespace EarFluent.Infrastructure.Services;
+namespace FluentEar.Infrastructure.Services;
 
 public class LyricsOvhSongService : ISongService
 {

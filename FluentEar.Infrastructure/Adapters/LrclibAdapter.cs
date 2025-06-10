@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EarFluent.Infrastructure.Adapters;
+namespace FluentEar.Infrastructure.Adapters;
 
 internal class LrclibAdapter
 {

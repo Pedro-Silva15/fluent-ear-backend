@@ -1,4 +1,4 @@
-namespace EarFluent.Domain.Entities;
+namespace FluentEar.Domain.Entities;
 
 public class SongEntity
 {

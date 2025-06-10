@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using EarFluent.Application.Interfaces;
+using FluentEar.Application.Interfaces;
 using System.Text.Json;
-using EarFluent.Application.Models.Lyrics.Requests;
+using FluentEar.Application.Models.Lyrics.Requests;
 
-namespace EarFluent.Api.Controllers;
+namespace FluentEar.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

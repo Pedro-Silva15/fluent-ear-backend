@@ -1,4 +1,4 @@
-namespace EarFluent.Application.Models.Lyrics.Requests;
+namespace FluentEar.Application.Models.Lyrics.Requests;
 
 public class GetLyricsRequest
 {
