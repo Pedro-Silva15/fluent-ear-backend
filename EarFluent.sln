@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Ui", "EarFluent.Api\EarFluent.Ui.csproj", "{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Api", "EarFluent.Api\EarFluent.Api.csproj", "{0568FEEB-FAAB-4677-B136-4D4FF53F1BB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EarFluent.Domain", "EarFluent.Domain\EarFluent.Domain.csproj", "{03C9A0C4-8AE5-4235-9E1A-7284486DEF6C}"
 EndProject

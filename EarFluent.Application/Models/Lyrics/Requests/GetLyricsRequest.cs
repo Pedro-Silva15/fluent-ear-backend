@@ -1,6 +1,6 @@
-namespace EarFluent.Application.DTOs.Requests;
+namespace EarFluent.Application.Models.Lyrics.Requests;
 
-public class SongLyricsRequest
+public class GetLyricsRequest
 {
     public string Artist { get; set; } = string.Empty;
     public string SongTitle { get; set; } = string.Empty;

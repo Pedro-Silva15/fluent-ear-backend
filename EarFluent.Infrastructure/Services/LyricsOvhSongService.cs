@@ -1,22 +1,22 @@
-using EarFluent.Application.DTOs.Requests;
 using EarFluent.Application.DTOs.Response;
 using EarFluent.Application.Interfaces;
+using EarFluent.Application.Models.Lyrics.Requests;
 using EarFluent.Domain.Entities;
 using System.Net.Http.Json;
 
 namespace EarFluent.Infrastructure.Services;
 
-public class SongService : ISongService
+public class LyricsOvhSongService : ISongService
 {
     private readonly HttpClient _client;
     private readonly string _apiUrl = Environment.GetEnvironmentVariable("lyricsUrl") ?? throw new InvalidOperationException("The api url is not set.");
 
-    public SongService(HttpClient client)
+    public LyricsOvhSongService(HttpClient client)
     {
         _client = client;
     }
 
-    public async Task<SongEntity> GetLyrics(SongLyricsRequest request)
+    public async Task<SongEntity> GetLyrics(GetLyricsRequest request)
     {
         var response = await _client.GetAsync($"{_apiUrl}/{request.Artist}/{request.SongTitle}");
         if (!response.IsSuccessStatusCode)

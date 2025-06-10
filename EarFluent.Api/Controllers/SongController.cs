@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using EarFluent.Application.Interfaces;
 using System.Text.Json;
-using EarFluent.Application.DTOs.Requests;
+using EarFluent.Application.Models.Lyrics.Requests;
 
-namespace EarFluent.Ui.Controllers;
+namespace EarFluent.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -16,11 +16,15 @@ public class SongController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLyrics([FromQuery] SongLyricsRequest request)
+    public async Task<IActionResult> GetLyrics([FromQuery] GetLyricsRequest request)
     {
+        var validator = new GetLyricsRequestValidator();
+        var result = validator.Validate(request);
+
+        if(!result.IsValid)
+            return BadRequest(result.Errors.Select(error => error.ErrorMessage).ToList());
+
         var song = await _songService.GetLyrics(request);
-        if (song == null)
-            return BadRequest("Algo deu errado!");
-        return Ok(JsonSerializer.Serialize(song));
+        return Ok(song);
     }
 }

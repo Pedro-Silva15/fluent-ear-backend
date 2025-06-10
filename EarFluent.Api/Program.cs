@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ISongService, SongService>();
-builder.Services.AddHttpClient<SongService>();
+builder.Services.AddScoped<ISongService, LyricsOvhSongService>();
+builder.Services.AddHttpClient<LyricsOvhSongService>();
 
 builder.Services.AddCors(options =>
 {
