@@ -15,7 +15,7 @@ public class SongEntity
         Lyrics = NormalizeLyrics(lyrics);
     }
 
-    private static string NormalizeLyrics(string lyrics)
+    private string NormalizeLyrics(string lyrics)
     {
         var normalizeLyrics = lyrics
         .Replace("\r\n", "\n")
