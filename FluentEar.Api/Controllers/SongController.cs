@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using FluentEar.Application.Interfaces;
-using System.Text.Json;
 using FluentEar.Application.Models.Lyrics.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FluentEar.Api.Controllers;
 

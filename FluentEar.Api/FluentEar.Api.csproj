@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FluentEar.Application\FluentEar.Application.csproj" />
     <ProjectReference Include="..\FluentEar.Infrastructure\FluentEar.Infrastructure.csproj" />
   </ItemGroup>
