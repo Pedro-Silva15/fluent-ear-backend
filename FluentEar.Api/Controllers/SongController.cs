@@ -6,16 +6,10 @@ namespace FluentEar.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SongController : ControllerBase
+public class SongController(ISongService service) : ControllerBase
 {
-    private readonly ISongService _songService;
-    public SongController(ISongService service)
-    {
-        _songService = service;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetLyrics([FromQuery] GetLyricsRequest request)
+    public async Task<IActionResult> GetLyrics([FromQuery]GetLyricsRequest request)
     {
         var validator = new GetLyricsRequestValidator();
         var result = validator.Validate(request);
@@ -23,7 +17,7 @@ public class SongController : ControllerBase
         if(!result.IsValid)
             return BadRequest(result.Errors.Select(error => error.ErrorMessage).ToList());
 
-        var song = await _songService.GetLyrics(request);
+        var song = await service.GetLyrics(request);
         return Ok(song);
     }
 }

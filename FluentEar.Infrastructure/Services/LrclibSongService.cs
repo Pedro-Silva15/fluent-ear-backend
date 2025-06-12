@@ -1,22 +1,15 @@
-﻿using FluentEar.Application.DTOs.Response;
-using FluentEar.Application.Interfaces;
+﻿using FluentEar.Application.Interfaces;
 using FluentEar.Application.Models.Lyrics.Requests;
 using FluentEar.Domain.Entities;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using FluentEar.Infrastructure.Adapters;
+using System.Net.Http.Json;
 
 namespace FluentEar.Infrastructure.Services;
 
-public class LrclibSongService : ISongService
+public class LrclibSongService(HttpClient client) : ISongService
 {
-    private readonly HttpClient _client;
+    private readonly HttpClient _client = client;
     private readonly string _apiUrl = "https://lrclib.net/api/search?";
-
-    public LrclibSongService(HttpClient client)
-    {
-        _client = client;
-    }
 
     public async Task<SongEntity> GetLyrics(GetLyricsRequest request)
     {

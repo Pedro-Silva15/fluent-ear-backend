@@ -1,6 +1,5 @@
 using FluentEar.Application.Interfaces;
 using FluentEar.Infrastructure.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 

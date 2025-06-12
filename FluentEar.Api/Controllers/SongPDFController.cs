@@ -19,9 +19,9 @@ public class SongPDFController : ControllerBase
 
         byte[] file = new ReturnPDFBytes().Execute(songEntity!);
 
-        if (file.Length > 0)
-            return File(file, MediaTypeNames.Application.Pdf, $"{request.Artist} - {request.SongTitle}.pdf");
+        if (0 < file.Length)
+            return File(file, MediaTypeNames.Application.Pdf, $"{songEntity?.Artist} - {songEntity?.Title}.pdf");
 
-        return Ok();
+        return NoContent();
     }
 }
