@@ -9,7 +9,7 @@ public class SongLyricsReportResolver : IFontResolver
     {
         var stream = ReadFontFile(faceName);
 
-        stream ??= ReadFontFile(FontHelper.OPEN_SANS_REGULAR);
+        stream ??= ReadFontFile(FontHelper.DEFAULT_FONT);
 
         var length = (int)stream!.Length;
 

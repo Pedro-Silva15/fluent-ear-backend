@@ -16,17 +16,35 @@ public class ReturnPDFBytes
     public byte[] Execute(SongEntity song)
     {
         var document = CreateDocument();
-        var page = CreatePage(document);
+        var section = CreatePage(document);
 
-        var paragraph = page.AddParagraph();
+        var image = section.AddImage(@"C:\Users\pedro\Desktop\Assets\Logo.png");
+        image.Width = Unit.FromPoint(99.59);
+        image.LockAspectRatio = true;
+        image.Top = Unit.FromPoint(35);
+        image.Left = Unit.FromPoint(178);
 
-        paragraph.AddFormattedText(song.Title, new Font { Name = FontHelper.OPEN_SANS_REGULAR, Size = 20, Bold = true});
+        var paragraph = section.AddParagraph();
+        paragraph.Format.LeftIndent = Unit.FromPoint(40);
+        paragraph.Format.SpaceBefore = Unit.FromPoint(14.21);
+        paragraph.AddFormattedText(song.Title, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 14 });
         paragraph.AddLineBreak();
+        paragraph.AddFormattedText(song.Artist, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 10 });
 
-        paragraph.AddFormattedText(song.Artist, new Font { Name = FontHelper.OPEN_SANS_REGULAR, Size = 16});
-        paragraph.AddLineBreak();
+        var lyrics = section.AddParagraph();
+        lyrics.Format.LeftIndent = Unit.FromPoint(40);
+        lyrics.Format.SpaceBefore = Unit.FromPoint(6.94);
+        lyrics.AddFormattedText(song.Lyrics, new Font { Name = FontHelper.OPEN_SANS_REGULAR, Size = 6 });
 
-        paragraph.AddFormattedText(song.Lyrics, new Font { Name = FontHelper.OPEN_SANS_REGULAR, Size = 12});
+        // Rodapé posicionado a 10.29pt da borda inferior
+        section.PageSetup.FooterDistance = Unit.FromPoint(10.29);
+
+        var footer = section.Footers.Primary.AddParagraph();
+        footer.Format.LeftIndent = Unit.FromPoint(127.37);
+        footer.Format.SpaceBefore = Unit.FromPoint(6.94);
+        footer.Format.Font.Name = FontHelper.OPEN_SANS_REGULAR;
+        footer.Format.Font.Size = 6;
+        footer.AddFormattedText("Developed by: Pedro Silva", new Font { Name = FontHelper.OPEN_SANS_LIGHTITALIC, Size = 5 });
 
         return RenderDocument(document);
     }
@@ -35,7 +53,6 @@ public class ReturnPDFBytes
     {
         var document = new Document();
         document.Info.Title = "Fluent Ear";
-        document.Info.Subject = "The best project!";
 
         var style = document.Styles["Normal"];
         style!.Font.Name = FontHelper.OPEN_SANS_REGULAR;
@@ -48,10 +65,10 @@ public class ReturnPDFBytes
         var section = document.AddSection();
         section.PageSetup = document.DefaultPageSetup.Clone();
         section.PageSetup.PageFormat = PageFormat.A4;
-        section.PageSetup.LeftMargin = 40;
-        section.PageSetup.RightMargin = 40;
-        section.PageSetup.TopMargin = 80;
-        section.PageSetup.BottomMargin = 80;
+        section.PageSetup.LeftMargin = 0;
+        section.PageSetup.RightMargin = 0;
+        section.PageSetup.TopMargin = 0;
+        section.PageSetup.BottomMargin = 0;
 
         return section;
     }
@@ -64,7 +81,7 @@ public class ReturnPDFBytes
         };
 
         renderer.RenderDocument();
-         
+
         using var file = new MemoryStream();
         renderer.PdfDocument.Save(file);
 

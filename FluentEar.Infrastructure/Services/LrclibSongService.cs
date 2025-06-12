@@ -25,8 +25,6 @@ public class LrclibSongService : ISongService
             throw new Exception("The lyrics song was not found!");
         var songsList = await response.Content.ReadFromJsonAsync<List<LrclibAdapter>>();
         string songLyrics = songsList![0].SongLyrics;
-        Console.Clear();
-        Console.WriteLine(songLyrics);
         return new SongEntity(request.Artist, request.SongTitle, songLyrics);
     }
 }

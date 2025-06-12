@@ -12,16 +12,6 @@ public class SongEntity
         Id = Guid.NewGuid();
         Artist = artist;
         Title = title;
-        Lyrics = NormalizeLyrics(lyrics);
-    }
-
-    private string NormalizeLyrics(string lyrics)
-    {
-        var normalizeLyrics = lyrics
-        .Replace("\r\n", "\n")
-        .Replace("\n\n", "\n")
-        .Trim();
-
-        return normalizeLyrics;
+        Lyrics = lyrics;
     }
 }
