@@ -1,9 +1,11 @@
-﻿using FluentEar.Application.Report.Fonts;
-using FluentEar.Domain.Entities;
+﻿using FluentEar.Application.Models.Lyrics.Requests.GeneratePDF;
+using FluentEar.Application.Report.Fonts;
 using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
+using System.Drawing;
 
 namespace FluentEar.Application;
 
@@ -14,24 +16,23 @@ public class ReturnPDFBytes
         GlobalFontSettings.FontResolver = new SongLyricsReportResolver();
     }
 
-    public byte[] Execute(SongEntity song)
+    public byte[] Execute(GeneratePDFRequest song)
     {
         var document = CreateDocument();
         var section = CreatePage(document);
 
-        var image = section.AddImage(@"C:\Users\po4747\Desktop\GitHub\fluent-ear-backend\FluentEar.Application\Assets\FluentEarLogo.png");
-        image.Width = Unit.FromPoint(99.59);
-        image.LockAspectRatio = true;
-        image.Top = Unit.FromPoint(35);
-        image.Left = Unit.FromPoint(178);
+        var elementCoordinates = new[] { new ElementCoordinates() { TopDistanceInPoints = 35, LeftDistanceInPoints = 178 },
+        new ElementCoordinates() { TopDistanceInPoints = 35, LeftDistanceInPoints = 476 }};
+        AddMultiplesImages(section, @"C:\Users\po4747\Desktop\GitHub\fluent-ear-backend\FluentEar.Application\Assets\FluentEarLogo.png", 99.59, elementCoordinates: elementCoordinates);
 
         var songTitle = section.AddParagraph();
         songTitle.Format.LeftIndent = Unit.FromPoint(40);
         songTitle.Format.SpaceBefore = Unit.FromPoint(14.21);
-        songTitle.AddFormattedText(song.Title, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 14 });
+        songTitle.AddFormattedText(song.SongTitle, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 14 });
 
         var artist = section.AddParagraph();
-        artist.AddFormattedText(song.Artist, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 10 });
+        artist.Format.LeftIndent = Unit.FromPoint(40);
+        artist.AddFormattedText(song.ArtistName, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 10 });
 
         var lyrics = section.AddParagraph();
         lyrics.Format.LeftIndent = Unit.FromPoint(40);
@@ -104,9 +105,37 @@ public class ReturnPDFBytes
         graphic.DrawRectangle(pen, x, y, width, height);
     }
 
-    private static void AddImage(string fileName, )
+    private static void AddMultiplesImages(Section section, string fileName, double widthInPoints,
+        bool lockAspectRatio = true, params ElementCoordinates[] elementCoordinates)
     {
+        foreach (var element in elementCoordinates)
+        {
+            var frame = section.AddTextFrame();
+            frame.Top = Unit.FromPoint(element.TopDistanceInPoints);
+            frame.Left = Unit.FromPoint(element.LeftDistanceInPoints);
+            frame.RelativeVertical = RelativeVertical.Page;
+            frame.RelativeHorizontal = RelativeHorizontal.Page;
 
+            var image = frame.AddImage(fileName);
+            image.Width = Unit.FromPoint(widthInPoints);
+            image.LockAspectRatio = lockAspectRatio;
+        }
     }
-
 }
+
+internal class ElementCoordinates
+{
+    public double TopDistanceInPoints { get; set; }
+    public double LeftDistanceInPoints { get; set; }
+}
+
+// Cálculo da fonte
+//using PdfSharp.Drawing;
+//using (var gfx = XGraphics.CreateMeasureContext(new XSize(595, 842), XGraphicsUnit.Point, XPageDirection.Downwards))
+//{
+//    var font = new XFont("Open Sans", 12, XFontStyle.Regular);
+//var size = gfx.MeasureString("Hello", font);
+
+//double widthInPoints = size.Width;
+//double heightInPoints = size.Height;
+//}

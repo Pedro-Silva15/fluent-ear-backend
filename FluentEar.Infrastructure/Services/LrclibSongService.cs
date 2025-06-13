@@ -1,12 +1,12 @@
 ﻿using FluentEar.Application.Interfaces;
-using FluentEar.Application.Models.Lyrics.Requests;
+using FluentEar.Application.Models.Lyrics.Requests.GetLyrics;
 using FluentEar.Domain.Entities;
 using FluentEar.Infrastructure.Adapters;
 using System.Net.Http.Json;
 
 namespace FluentEar.Infrastructure.Services;
 
-public class LrclibSongService(HttpClient client) : ISongService
+public class LrclibSongService(HttpClient client) : ILyricsService
 {
     private readonly HttpClient _client = client;
     private readonly string _apiUrl = "https://lrclib.net/api/search?";

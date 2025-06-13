@@ -3,8 +3,8 @@ using FluentEar.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient<ISongService>();
-builder.Services.AddScoped<ISongService, LrclibSongService>();
+builder.Services.AddHttpClient<ILyricsService>();
+builder.Services.AddScoped<ILyricsService, LrclibSongService>();
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();

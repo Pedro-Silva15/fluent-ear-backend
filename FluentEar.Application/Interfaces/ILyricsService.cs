@@ -1,9 +1,9 @@
-using FluentEar.Application.Models.Lyrics.Requests;
+using FluentEar.Application.Models.Lyrics.Requests.GetLyrics;
 using FluentEar.Domain.Entities;
 
 namespace FluentEar.Application.Interfaces;
 
-public interface ISongService
+public interface ILyricsService
 {
     Task<SongEntity> GetLyrics(GetLyricsRequest request);
 }
