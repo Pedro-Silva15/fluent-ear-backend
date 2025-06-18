@@ -1,11 +1,11 @@
-﻿using FluentEar.Application.Models.Lyrics.Requests.GeneratePDF;
+﻿using FluentEar.Application.Models;
+using FluentEar.Application.Models.Lyrics.Requests.GeneratePDF;
 using FluentEar.Application.Report.Fonts;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
-using System.Drawing;
 
 namespace FluentEar.Application;
 
@@ -16,35 +16,36 @@ public class ReturnPDFBytes
         GlobalFontSettings.FontResolver = new SongLyricsReportResolver();
     }
 
-    public byte[] Execute(GeneratePDFRequest song)
+    public void Test(string? letter)
+    {
+        const uint maxFontSize =  40;
+        MigraDoc.DocumentObjectModel.Font fontTest = new() { Name = FontHelper.ANONYMOUS_PRO_REGULAR, Size = Unit.FromPoint(1) };
+
+        const double MAX_WIDTH = 233;
+        const double MAX_HEIGHT = 706.78;
+
+        XFont xFont;
+        XSize size;
+
+        using var graphics = XGraphics.CreateMeasureContext(new XSize(MAX_WIDTH, MAX_HEIGHT), XGraphicsUnit.Point, XPageDirection.Downwards);
+
+        Console.Clear();
+        Console.WriteLine($"Mostrando informações para {letter}:");
+        for(int i = 1; i <= maxFontSize; i++)
+        {
+            fontTest.Size = Unit.FromPoint(i);
+            xFont = new XFont(fontTest.Name, fontTest.Size.Point);
+            size = graphics.MeasureString(letter!, xFont);
+            Console.WriteLine($"{i:00}: Altura:{size.Height} Largura: {size.Width}");
+        }
+    }
+
+    public byte[] Execute(GeneratePDFRequest request)
     {
         var document = CreateDocument();
         var section = CreatePage(document);
 
-        var elementCoordinates = new[] { new ElementCoordinates() { TopDistanceInPoints = 35, LeftDistanceInPoints = 178 },
-        new ElementCoordinates() { TopDistanceInPoints = 35, LeftDistanceInPoints = 476 }};
-        AddMultiplesImages(section, @"C:\Users\po4747\Desktop\GitHub\fluent-ear-backend\FluentEar.Application\Assets\FluentEarLogo.png", 99.59, elementCoordinates: elementCoordinates);
-
-        var songTitle = section.AddParagraph();
-        songTitle.Format.LeftIndent = Unit.FromPoint(40);
-        songTitle.Format.SpaceBefore = Unit.FromPoint(14.21);
-        songTitle.AddFormattedText(song.SongTitle, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 14 });
-
-        var artist = section.AddParagraph();
-        artist.Format.LeftIndent = Unit.FromPoint(40);
-        artist.AddFormattedText(song.ArtistName, new Font { Name = FontHelper.OPEN_SANS_SEMIBOLD, Size = 10 });
-
-        var lyrics = section.AddParagraph();
-        lyrics.Format.LeftIndent = Unit.FromPoint(40);
-        lyrics.Format.SpaceBefore = Unit.FromPoint(6.94);
-        lyrics.AddFormattedText(song.Lyrics, new Font { Name = FontHelper.OPEN_SANS_REGULAR, Size = 8 });
-
-        //var footer = section.Footers.Primary.AddParagraph();
-        //footer.Format.LeftIndent = Unit.FromPoint(127.37);
-        //footer.Format.SpaceBefore = Unit.FromPoint(6.94);
-        //footer.Format.Font.Name = FontHelper.OPEN_SANS_REGULAR;
-        //footer.Format.Font.Size = 6;
-        //footer.AddFormattedText("Developed by: Pedro Silva", new Font { Name = FontHelper.OPEN_SANS_LIGHTITALIC, Size = 5 });
+        AddInformations(section, request);
 
         return RenderDocument(document);
     }
@@ -55,7 +56,7 @@ public class ReturnPDFBytes
         document.Info.Title = "Fluent Ear";
 
         var style = document.Styles["Normal"];
-        style!.Font.Name = FontHelper.OPEN_SANS_REGULAR;
+        style!.Font.Name = FontHelper.ANONYMOUS_PRO_REGULAR;
 
         return document;
     }
@@ -105,37 +106,83 @@ public class ReturnPDFBytes
         graphic.DrawRectangle(pen, x, y, width, height);
     }
 
-    private static void AddMultiplesImages(Section section, string fileName, double widthInPoints,
-        bool lockAspectRatio = true, params ElementCoordinates[] elementCoordinates)
+    private static void AddInformations(Section section, GeneratePDFRequest song)
     {
-        foreach (var element in elementCoordinates)
+        double distanceBetweenImages = 0;
+        for(int i = 0 ; i < 2; i++)
+        {
+            AddHeaderAndFooter(section, LogoImage.GetImages(), distanceBetweenImages);
+            AddSongInformations(section, song, distanceBetweenImages);
+            distanceBetweenImages += 298;
+        }
+    }
+
+    private static void AddHeaderAndFooter(Section section, List<LogoImage> images, double leftDistanceIncrement)
+    {
+        foreach (var imagem in images)
         {
             var frame = section.AddTextFrame();
-            frame.Top = Unit.FromPoint(element.TopDistanceInPoints);
-            frame.Left = Unit.FromPoint(element.LeftDistanceInPoints);
+            frame.Top = Unit.FromPoint(imagem.TopDistanceInPoints);
+            frame.Left = Unit.FromPoint(imagem.LeftDistanceInPoints + leftDistanceIncrement);
             frame.RelativeVertical = RelativeVertical.Page;
             frame.RelativeHorizontal = RelativeHorizontal.Page;
 
-            var image = frame.AddImage(fileName);
-            image.Width = Unit.FromPoint(widthInPoints);
-            image.LockAspectRatio = lockAspectRatio;
+            var image = frame.AddImage(imagem.Path);
+            image.Width = Unit.FromPoint(imagem.Width);
+            image.LockAspectRatio = true;
         }
     }
+
+    private static void AddSongInformations(Section section, GeneratePDFRequest song, double leftDistanceIncrement)
+    {
+        double maxFont = 14;
+        var frame = section.AddTextFrame();
+        frame.Top = Unit.FromPoint(73.93);
+        frame.Left = Unit.FromPoint(40 + leftDistanceIncrement);
+        frame.Width = Unit.FromPoint(233);
+        frame.Height = Unit.FromPoint(706.78);
+        frame.RelativeVertical = RelativeVertical.Page;
+        frame.RelativeHorizontal = RelativeHorizontal.Page;
+
+        CalculateMaxFont(song.SongTitle, FontStyle.SONG_TITLE, ref maxFont);
+        var songTitle = frame.AddParagraph();
+        songTitle.AddFormattedText(song.SongTitle, new Font() { Name = FontStyle.SONG_TITLE.Name, Size = maxFont });
+
+        var artistName = frame.AddParagraph();
+        CalculateMaxFont(song.ArtistName, FontStyle.ARTIST_NAME, ref maxFont);
+        artistName.AddFormattedText(song.ArtistName, new Font() { Name = FontStyle.ARTIST_NAME.Name, Size = maxFont });
+
+        var lyrics = frame.AddParagraph();
+        CalculateMaxFont(song.Lyrics, FontStyle.LYRICS, ref maxFont);
+        lyrics.AddFormattedText("\n" + song.Lyrics, new Font() { Name = FontStyle.LYRICS.Name, Size = maxFont });
+    }
+
+    private static void CalculateMaxFont(string text, Font font, ref double maxFontSize)
+    {
+        const double MAX_WIDTH = 233;
+        const double MAX_HEIGHT = 706.78;
+
+        var verses = text.Split('\n');
+        int versesCount = verses.Length;
+
+        string longestVerse = verses
+            .OrderByDescending(verse => verse.Length)
+            .First();
+
+        var xFont = new XFont(font.Name, font.Size.Point);
+
+        using var graphics = XGraphics.CreateMeasureContext(new XSize(MAX_WIDTH, MAX_HEIGHT), XGraphicsUnit.Point, XPageDirection.Downwards);
+
+        var size = graphics.MeasureString(longestVerse, xFont);
+
+        double widthInPoints = size.Width;
+        double heighInPoints = size.Height * versesCount;
+
+        maxFontSize = font.Size.Point;
+        if(MAX_WIDTH < widthInPoints)
+            maxFontSize = (MAX_WIDTH * font.Size.Point) / widthInPoints;
+        
+        if(MAX_HEIGHT < heighInPoints)
+            maxFontSize = (MAX_HEIGHT * maxFontSize) / heighInPoints;
+    }
 }
-
-internal class ElementCoordinates
-{
-    public double TopDistanceInPoints { get; set; }
-    public double LeftDistanceInPoints { get; set; }
-}
-
-// Cálculo da fonte
-//using PdfSharp.Drawing;
-//using (var gfx = XGraphics.CreateMeasureContext(new XSize(595, 842), XGraphicsUnit.Point, XPageDirection.Downwards))
-//{
-//    var font = new XFont("Open Sans", 12, XFontStyle.Regular);
-//var size = gfx.MeasureString("Hello", font);
-
-//double widthInPoints = size.Width;
-//double heightInPoints = size.Height;
-//}

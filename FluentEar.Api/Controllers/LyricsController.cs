@@ -11,7 +11,7 @@ namespace FluentEar.Api.Controllers;
 [ApiController]
 public class LyricsController(ILyricsService service) : ControllerBase
 {
-    [HttpGet()]
+    [HttpGet]
     public async Task<IActionResult> GetLyrics([FromQuery] GetLyricsRequest request)
     {
         var validator = new GetLyricsRequestValidator();
@@ -24,8 +24,8 @@ public class LyricsController(ILyricsService service) : ControllerBase
         return Ok(song);
     }
 
-    [HttpGet("pdf")]
-    public IActionResult GeneratePDF([FromQuery] GeneratePDFRequest request)
+    [HttpPost]
+    public IActionResult GeneratePDF(GeneratePDFRequest request)
     {
         var validator = new GeneratePDFRequestValidator();
         var result = validator.Validate(request);
@@ -39,5 +39,12 @@ public class LyricsController(ILyricsService service) : ControllerBase
             return File(file, MediaTypeNames.Application.Pdf, $"{request.ArtistName} - {request.SongTitle}.pdf");
 
         return NoContent();
+    }
+
+    [HttpPost("test")]
+    public IActionResult Test(string letter)
+    {
+        new ReturnPDFBytes().Test(letter);
+        return Ok();
     }
 }
