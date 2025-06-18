@@ -16,30 +16,6 @@ public class ReturnPDFBytes
         GlobalFontSettings.FontResolver = new SongLyricsReportResolver();
     }
 
-    public void Test(string? letter)
-    {
-        const uint maxFontSize =  40;
-        MigraDoc.DocumentObjectModel.Font fontTest = new() { Name = FontHelper.ANONYMOUS_PRO_REGULAR, Size = Unit.FromPoint(1) };
-
-        const double MAX_WIDTH = 233;
-        const double MAX_HEIGHT = 706.78;
-
-        XFont xFont;
-        XSize size;
-
-        using var graphics = XGraphics.CreateMeasureContext(new XSize(MAX_WIDTH, MAX_HEIGHT), XGraphicsUnit.Point, XPageDirection.Downwards);
-
-        Console.Clear();
-        Console.WriteLine($"Mostrando informações para {letter}:");
-        for(int i = 1; i <= maxFontSize; i++)
-        {
-            fontTest.Size = Unit.FromPoint(i);
-            xFont = new XFont(fontTest.Name, fontTest.Size.Point);
-            size = graphics.MeasureString(letter!, xFont);
-            Console.WriteLine($"{i:00}: Altura:{size.Height} Largura: {size.Width}");
-        }
-    }
-
     public byte[] Execute(GeneratePDFRequest request)
     {
         var document = CreateDocument();
@@ -106,19 +82,21 @@ public class ReturnPDFBytes
         graphic.DrawRectangle(pen, x, y, width, height);
     }
 
-    private static void AddInformations(Section section, GeneratePDFRequest song)
+    private static void AddInformations(Section section, GeneratePDFRequest request)
     {
-        double distanceBetweenImages = 0;
+        double distanceBetweenInformations = 0;
         for(int i = 0 ; i < 2; i++)
         {
-            AddHeaderAndFooter(section, LogoImage.GetImages(), distanceBetweenImages);
-            AddSongInformations(section, song, distanceBetweenImages);
-            distanceBetweenImages += 298;
+            if(request.PrintHeaderAndFooter)
+                PrintHeaderAndFooter(section, distanceBetweenInformations);
+            AddSongInformations(section, request, distanceBetweenInformations);
+            distanceBetweenInformations += 298;
         }
     }
 
-    private static void AddHeaderAndFooter(Section section, List<LogoImage> images, double leftDistanceIncrement)
+    private static void PrintHeaderAndFooter(Section section, double leftDistanceIncrement)
     {
+        var images = LogoImage.GetImages();
         foreach (var imagem in images)
         {
             var frame = section.AddTextFrame();
@@ -133,7 +111,7 @@ public class ReturnPDFBytes
         }
     }
 
-    private static void AddSongInformations(Section section, GeneratePDFRequest song, double leftDistanceIncrement)
+    private static void AddSongInformations(Section section, GeneratePDFRequest request, double leftDistanceIncrement)
     {
         double maxFont = 14;
         var frame = section.AddTextFrame();
@@ -144,17 +122,17 @@ public class ReturnPDFBytes
         frame.RelativeVertical = RelativeVertical.Page;
         frame.RelativeHorizontal = RelativeHorizontal.Page;
 
-        CalculateMaxFont(song.SongTitle, FontStyle.SONG_TITLE, ref maxFont);
+        CalculateMaxFont(request.SongTitle, FontStyle.SONG_TITLE, ref maxFont);
         var songTitle = frame.AddParagraph();
-        songTitle.AddFormattedText(song.SongTitle, new Font() { Name = FontStyle.SONG_TITLE.Name, Size = maxFont });
+        songTitle.AddFormattedText(request.SongTitle, new Font() { Name = FontStyle.SONG_TITLE.Name, Size = maxFont });
 
         var artistName = frame.AddParagraph();
-        CalculateMaxFont(song.ArtistName, FontStyle.ARTIST_NAME, ref maxFont);
-        artistName.AddFormattedText(song.ArtistName, new Font() { Name = FontStyle.ARTIST_NAME.Name, Size = maxFont });
+        CalculateMaxFont(request.ArtistName, FontStyle.ARTIST_NAME, ref maxFont);
+        artistName.AddFormattedText(request.ArtistName, new Font() { Name = FontStyle.ARTIST_NAME.Name, Size = maxFont });
 
         var lyrics = frame.AddParagraph();
-        CalculateMaxFont(song.Lyrics, FontStyle.LYRICS, ref maxFont);
-        lyrics.AddFormattedText("\n" + song.Lyrics, new Font() { Name = FontStyle.LYRICS.Name, Size = maxFont });
+        CalculateMaxFont(request.SongLyrics, FontStyle.LYRICS, ref maxFont);
+        lyrics.AddFormattedText("\n" + request.SongLyrics, new Font() { Name = FontStyle.LYRICS.Name, Size = maxFont });
     }
 
     private static void CalculateMaxFont(string text, Font font, ref double maxFontSize)

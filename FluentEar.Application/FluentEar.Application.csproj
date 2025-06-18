@@ -8,15 +8,11 @@
 
   <ItemGroup>
     <None Remove="Report\Fonts\AnonymousPro-Bold.ttf" />
-    <None Remove="Report\Fonts\AnonymousPro-BoldItalic.ttf" />
-    <None Remove="Report\Fonts\AnonymousPro-Italic.ttf" />
     <None Remove="Report\Fonts\AnonymousPro-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Report\Fonts\AnonymousPro-Bold.ttf" />
-    <EmbeddedResource Include="Report\Fonts\AnonymousPro-BoldItalic.ttf" />
-    <EmbeddedResource Include="Report\Fonts\AnonymousPro-Italic.ttf" />
     <EmbeddedResource Include="Report\Fonts\AnonymousPro-Regular.ttf" />
   </ItemGroup>
 

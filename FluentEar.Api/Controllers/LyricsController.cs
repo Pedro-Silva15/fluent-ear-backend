@@ -40,11 +40,4 @@ public class LyricsController(ILyricsService service) : ControllerBase
 
         return NoContent();
     }
-
-    [HttpPost("test")]
-    public IActionResult Test(string letter)
-    {
-        new ReturnPDFBytes().Test(letter);
-        return Ok();
-    }
 }
