@@ -27,7 +27,7 @@ public class LyricsController(ILyricsService service) : ControllerBase
     [HttpPost]
     public IActionResult GeneratePDF(GeneratePDFRequest request)
     {
-        var validator = new GeneratePDFRequestValidator();
+        var validator = new GeneratePdfRequestValidator();
         var result = validator.Validate(request);
 
         if (!result.IsValid)
@@ -37,6 +37,13 @@ public class LyricsController(ILyricsService service) : ControllerBase
 
         if (0 < file.Length)
             return File(file, MediaTypeNames.Application.Pdf, $"{request.ArtistName} - {request.SongTitle}.pdf");
+
+        return NoContent();
+    }
+
+    [HttpGet("letter")]
+    public IActionResult SeeLetterWidth(string letter)
+    {
 
         return NoContent();
     }

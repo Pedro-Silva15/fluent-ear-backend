@@ -113,7 +113,7 @@ public class ReturnPDFBytes
 
     private static void AddSongInformations(Section section, GeneratePDFRequest request, double leftDistanceIncrement)
     {
-        double maxFont = 14;
+        var resolver = new FontStyleResolver();
         var frame = section.AddTextFrame();
         frame.Top = Unit.FromPoint(73.93);
         frame.Left = Unit.FromPoint(40 + leftDistanceIncrement);
@@ -122,45 +122,13 @@ public class ReturnPDFBytes
         frame.RelativeVertical = RelativeVertical.Page;
         frame.RelativeHorizontal = RelativeHorizontal.Page;
 
-        CalculateMaxFont(request.SongTitle, FontStyle.SONG_TITLE, ref maxFont);
         var songTitle = frame.AddParagraph();
-        songTitle.AddFormattedText(request.SongTitle, new Font() { Name = FontStyle.SONG_TITLE.Name, Size = maxFont });
+        songTitle.AddFormattedText(request.SongTitle, resolver.GetFontSongTitle(request.SongTitle));
 
         var artistName = frame.AddParagraph();
-        CalculateMaxFont(request.ArtistName, FontStyle.ARTIST_NAME, ref maxFont);
-        artistName.AddFormattedText(request.ArtistName, new Font() { Name = FontStyle.ARTIST_NAME.Name, Size = maxFont });
+        artistName.AddFormattedText(request.ArtistName, resolver.GetFontArtistName(request.ArtistName));
 
         var lyrics = frame.AddParagraph();
-        CalculateMaxFont(request.SongLyrics, FontStyle.LYRICS, ref maxFont);
-        lyrics.AddFormattedText("\n" + request.SongLyrics, new Font() { Name = FontStyle.LYRICS.Name, Size = maxFont });
-    }
-
-    private static void CalculateMaxFont(string text, Font font, ref double maxFontSize)
-    {
-        const double MAX_WIDTH = 233;
-        const double MAX_HEIGHT = 706.78;
-
-        var verses = text.Split('\n');
-        int versesCount = verses.Length;
-
-        string longestVerse = verses
-            .OrderByDescending(verse => verse.Length)
-            .First();
-
-        var xFont = new XFont(font.Name, font.Size.Point);
-
-        using var graphics = XGraphics.CreateMeasureContext(new XSize(MAX_WIDTH, MAX_HEIGHT), XGraphicsUnit.Point, XPageDirection.Downwards);
-
-        var size = graphics.MeasureString(longestVerse, xFont);
-
-        double widthInPoints = size.Width;
-        double heighInPoints = size.Height * versesCount;
-
-        maxFontSize = font.Size.Point;
-        if(MAX_WIDTH < widthInPoints)
-            maxFontSize = (MAX_WIDTH * font.Size.Point) / widthInPoints;
-        
-        if(MAX_HEIGHT < heighInPoints)
-            maxFontSize = (MAX_HEIGHT * maxFontSize) / heighInPoints;
+        lyrics.AddFormattedText($"\n{request.SongLyrics}", resolver.GetFontSongLyrics(request.SongLyrics));
     }
 }
